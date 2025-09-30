@@ -4,13 +4,17 @@ carCanvas.width = 200;
 const networkCanvas = document.getElementById("networkCanvas");
 networkCanvas.width = 500;
 
+// Pause/Resume system
+let isPaused = false;
+let animationId;
+
 const carCtx = carCanvas.getContext("2d");
 
 const networkCtx = networkCanvas.getContext("2d");
 const road = new Road(carCanvas.width/2,carCanvas.width*0.95)
 
-const N =1;
-const cars = generateCars(N);
+let N = 100;  // Default to 100 cars
+let cars = generateCars(N);
 let bestCar=cars[0];
 if(localStorage.getItem("bestBrain")){
     for(let i=0;i<cars.length;i++){
@@ -22,15 +26,33 @@ if(localStorage.getItem("bestBrain")){
     }
 }
 
-const traffic = [
-    new Car(road.getLaneCenter(1),-100,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(0),-300,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(2),-300,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(0),-500,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(1),-500,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(1),-800,30,50,"TRAFFIC",2),
-    new Car(road.getLaneCenter(2),-800,30,50,"TRAFFIC",2),
-];
+// Smart traffic generation system
+let traffic = [];
+let trafficSpawnDistance = 250; // Distance between traffic groups
+let nextTrafficSpawn = -100;
+
+function generateTrafficGroup() {
+    const laneCount = 3; // Road has 3 lanes
+    const maxCarsPerGroup = laneCount - 1; // Always leave at least 1 lane open
+    const minGapForPassing = 150; // Minimum gap for our car to pass through
+    
+    // Randomly decide how many cars in this group (1 or 2, never all 3 lanes)
+    const carsInThisGroup = Math.floor(Math.random() * maxCarsPerGroup) + 1;
+    const availableLanes = [0, 1, 2];
+    
+    // Randomly select which lanes to block (always leaving at least one open)
+    for (let i = 0; i < carsInThisGroup; i++) {
+        const laneIndex = availableLanes.splice(Math.floor(Math.random() * availableLanes.length), 1)[0];
+        traffic.push(new Car(road.getLaneCenter(laneIndex), nextTrafficSpawn, 30, 50, "TRAFFIC", 2));
+    }
+    
+    nextTrafficSpawn -= trafficSpawnDistance;
+}
+
+// Generate initial traffic
+for (let i = 0; i < 15; i++) {
+    generateTrafficGroup();
+}
 
 animate();
 
@@ -52,8 +74,17 @@ function generateCars(N){
 
 
 function animate(time){
+    // Update existing traffic
     for(let i=0;i<traffic.length;i++){
         traffic[i].update(road.borders,[]);
+    }
+    
+    // Remove traffic that's too far behind (cleanup)
+    traffic = traffic.filter(car => car.y < bestCar.y + 500);
+    
+    // Generate new traffic ahead if needed
+    if (bestCar.y < nextTrafficSpawn + 400) {
+        generateTrafficGroup();
     }
     for(let i=0;i<cars.length;i++){
         cars[i].update(road.borders,traffic);
@@ -87,5 +118,61 @@ function animate(time){
 
     networkCtx.lineDashOffset=-time/50;
     Visualizer.drawNetwork(networkCtx,bestCar.brain);
-    requestAnimationFrame(animate);
+    
+    // Only continue animation if not paused
+    if (!isPaused) {
+        animationId = requestAnimationFrame(animate);
+    }
+}
+
+// Pause/Resume function
+function toggleTraining() {
+    isPaused = !isPaused;
+    
+    if (!isPaused) {
+        // Resume animation
+        animationId = requestAnimationFrame(animate);
+    }
+    
+    // Update button text (optional)
+    const button = document.querySelector('button[onclick="toggleTraining()"]');
+    if (button) {
+        button.textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
+    }
+}
+
+// Update car count function
+function updateCarCount() {
+    const dropdown = document.getElementById('carCount');
+    const newN = parseInt(dropdown.value);
+    
+    // Only update if value actually changed
+    if (newN !== N) {
+        N = newN;
+        
+        // Find current best car position to maintain progress
+        const currentBestY = bestCar ? bestCar.y : 0;
+        
+        // Regenerate cars with new count at current best position
+        cars = generateCars(N);
+        
+        // Position new cars at the current best position (not starting line)
+        for (let i = 0; i < cars.length; i++) {
+            cars[i].y = currentBestY;
+        }
+        
+        bestCar = cars[0];
+        
+        // If we had a saved brain, apply it to the new cars
+        if (localStorage.getItem("bestBrain")) {
+            for (let i = 0; i < cars.length; i++) {
+                cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+                if (i != 0) {
+                    NeuralNetwork.mutate(cars[i].brain, 0.2);
+                }
+            }
+        }
+        
+        console.log(`Updated to ${N} cars at position ${currentBestY}`);
+    }
 }

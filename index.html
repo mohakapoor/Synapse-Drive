@@ -3,17 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self Driving Car</title>
+    <title>Synapse-Drive - Neural Network Racing</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
-    <canvas id = "carCanvas">    </canvas>
-    <div id ="verticalButtons"> 
-        <button onclick="save()">🗃️</button>
-        <button onclick="discard()">🗑️</button>
+    <div id="header">
+        <h1>🧠 Synapse-Drive</h1>
+        <p>Neural networks learning to drive autonomously</p>
     </div>
-    <canvas id = "networkCanvas">    </canvas>
+    
+    <div class="three-column-layout">
+        <!-- Column 1: Track -->
+        <div class="column track-column">
+            <h3>🏎️ Racing Track</h3>
+            <canvas id="carCanvas"></canvas>
+        </div>
+        
+        <!-- Column 2: Controls & Info -->
+        <div class="column info-column">
+            <h3>🎮 Controls</h3>
+            <div class="controls">
+                <button onclick="save()">💾 Save Best</button>
+                <button onclick="discard()">🗑️ Reset</button>
+                <button onclick="toggleTraining()">⏸️ Pause</button>
+                
+                <div class="dropdown-container">
+                    <label for="carCount">🚗 Cars:</label>
+                    <select id="carCount" onchange="updateCarCount()">
+                        <option value="1">1 Car</option>
+                        <option value="100" selected>100 Cars</option>
+                        <option value="500">500 Cars</option>
+                        <option value="1000">1000 Cars</option>
+
+                    </select>
+                </div>
+            </div>
+            
+            <h3>📊 Statistics</h3>
+            <div id="stats">
+                <p>Generation: <span id="generation">1</span></p>
+                <p>Best Distance: <span id="bestDistance">0</span></p>
+                <p>Cars Alive: <span id="carsAlive">0</span></p>
+            </div>
+            
+            <h3>ℹ️ About</h3>
+            <div class="info">
+                <p>Watch neural networks learn to drive autonomously using genetic algorithms.</p>
+                <p><strong>Blue car:</strong> Best performer</p>
+                <p><strong>Green cars:</strong> Traffic obstacles</p>
+                <p><strong>Yellow rays:</strong> Sensor system</p>
+            </div>
+        </div>
+        
+        <!-- Column 3: Neural Network Visualizer -->
+        <div class="column visualizer-column">
+            <h3>🧠 Neural Network</h3>
+            <canvas id="networkCanvas"></canvas>
+        </div>
+    </div>
     <script src="src/core/Car.js"></script>
     <script src="src/core/Controls.js"></script>
     <script src="src/core/Road.js"></script>

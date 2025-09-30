@@ -1,33 +1,183 @@
 body{
-    margin:0;
-    background: darkgray;
-    overflow: hidden;
-    display:flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    font-family: 'Arial', sans-serif;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-#verticalButtons{
+#header {
+    text-align: center;
+    padding: 20px 0;
+    background: rgba(0,0,0,0.2);
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+#header p {
+    margin: 5px 0 0 0;
+    opacity: 0.8;
+    font-size: 1.1em;
+}
+
+.three-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: calc(100vh - 120px);
+}
+
+.column {
+    background: rgba(0,0,0,0.3);
+    border-radius: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
 }
 
+.column h3 {
+    margin: 0 0 15px 0;
+    text-align: center;
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+/* Track Column */
+.track-column {
+    align-items: center;
+    justify-content: center;
+}
+
+/* Info Column */
+.info-column {
+    overflow-y: auto;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.dropdown-container label {
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 50px;
+}
+
+select {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+select:hover {
+    background: rgba(255,255,255,1);
+    transform: translateY(-1px);
+}
+
+select:focus {
+    outline: 2px solid #4CAF50;
+    background: rgba(255,255,255,1);
+}
+
+#stats {
+    padding: 15px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+#stats p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.info {
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.info p {
+    margin: 8px 0;
+}
+
+/* Visualizer Column */
+.visualizer-column {
+    align-items: center;
+    justify-content: center;
+}
+
 button{
     border: none;
-    border-radius: 5px;
-    padding: 5px 5px 7px 5px;
-    margin: 2px;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 5px 0;
     cursor: pointer;
+    background: #4CAF50;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 button:hover{
-    background: blue;
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 #carCanvas{
     background: lightgray;
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
 }
 
 #networkCanvas{
     background: black;
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .three-column-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        height: auto;
+    }
+    
+    .column {
+        margin-bottom: 20px;
+    }
+    
+    #header h1 {
+        font-size: 2em;
+    }
 }
