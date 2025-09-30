@@ -21,49 +21,53 @@ A neural network-powered autonomous vehicle simulation built with JavaScript. Fe
 ## 🛠 Project Structure
 
 ```
-├── index.html      # Main HTML file
-├── main.js         # Main game loop and canvas setup
-├── car.js          # Car class with physics and rendering
-├── controls.js     # Keyboard input handling
-├── sensor.js       # Collision detection sensor system
-├── road.js         # Road rendering and boundaries
-├── utils.js        # Utility functions for intersections
-└── style.css       # Styling for the canvas
+├── src/
+│   ├── core/           # Core simulation components
+│   ├── ml/             # Neural networks and ML algorithms
+│   └── utils/          # Mathematical utilities
+├── assets/             # Stylesheets and static files
+├── docs/               # Technical documentation
+└── index.html          # Run this file to start!
 ```
 
 ## 🚀 Getting Started
 
-1. Clone this repository
-2. Open `index.html` in your web browser
-3. Use WASD or arrow keys to control the blue car
-4. Avoid colliding with the green traffic cars and road boundaries
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/mohakapoor/Synapse-Drive.git
+   cd Synapse-Drive
+   ```
 
-## 🧠 How It Works
+2. **Run the simulation**
+   - Simply open `index.html` in your web browser
+   - No installation or build process required!
 
-### Car Physics
-- Each car has position, velocity, acceleration, and rotation
-- Friction automatically slows down cars when not accelerating
-- Realistic turning mechanics that depend on current speed
+3. **Controls**
+   - Use **WASD** or **arrow keys** to control the blue car
+   - Avoid colliding with green traffic cars and road boundaries
+   - Watch the neural network visualization on the right panel
 
-### Sensor System
-- Cars equipped with a 10-ray sensor array spread 90° in front
-- Rays detect collisions with road boundaries and other vehicles
-- Sensor readings update in real-time for autonomous navigation
+## 🧠 What You'll See
 
-### Collision Detection
-- Uses polygon-based collision detection
-- Cars turn gray when damaged
-- Real-time intersection calculations between car polygons
+- **Blue Car**: Your manually controlled vehicle
+- **Green Cars**: AI traffic for obstacle avoidance training  
+- **Yellow Rays**: Sensor system detecting obstacles
+- **Right Panel**: Real-time neural network visualization
+- **Save/Load**: Buttons to save the best performing AI models
 
-## 🎯 Upcoming ML Features
+The simulation uses neural networks to learn autonomous driving through trial and error!
 
-- [ ] Neural network brain for autonomous decision making
-- [ ] Genetic algorithm training system
-- [ ] Reinforcement learning environment
-- [ ] Multiple AI car generations
-- [ ] Performance evolution tracking
-- [ ] Save/load trained neural networks
-- [ ] Real-time learning visualization
+## 🎯 Current ML Features
+
+- ✅ **Neural Network Brain**: Cars learn to drive autonomously
+- ✅ **Genetic Algorithm**: Population evolves over generations  
+- ✅ **Real-time Visualization**: Watch the neural network think
+- ✅ **Save/Load Models**: Preserve the best performing drivers
+- ✅ **Sensor-based Learning**: 10-ray collision detection system
+
+## 📚 Documentation
+
+For technical details, architecture, and development notes, see [`docs/design.md`](docs/design.md)
 
 ## 🔧 Technologies Used
 

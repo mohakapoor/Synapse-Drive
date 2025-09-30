@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Self Driving Car</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
@@ -14,13 +14,13 @@
         <button onclick="discard()">🗑️</button>
     </div>
     <canvas id = "networkCanvas">    </canvas>
-    <script src="car.js"></script>
-    <script src="controls.js"></script>
-    <script src="road.js"></script>
-    <script src="network.js"></script>
-    <script src="utils.js"></script>
-    <script src="sensor.js"></script>
-    <script src="visualizer.js"></script>
-    <script src="main.js"></script>
+    <script src="src/core/Car.js"></script>
+    <script src="src/core/Controls.js"></script>
+    <script src="src/core/Road.js"></script>
+    <script src="src/ml/NeuralNetwork.js"></script>
+    <script src="src/utils/Utils.js"></script>
+    <script src="src/core/Sensor.js"></script>
+    <script src="src/ml/Visualizer.js"></script>
+    <script src="src/main.js"></script>
 </body>
 </html>
