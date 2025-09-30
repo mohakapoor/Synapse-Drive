@@ -120,6 +120,11 @@ class Car{
         this.y-=Math.cos(this.angle)*this.speed;
     }
     draw(ctx,color,drawSensor=false){
+        // Safety check: make sure polygon exists before drawing
+        if (!this.polygon) {
+            this.polygon = this.#createPolygon();
+        }
+        
         if(this.damaged){
             ctx.fillStyle="gray";
         }

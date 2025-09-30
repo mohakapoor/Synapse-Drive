@@ -45,11 +45,31 @@ class GenerationManager {
         
         // Find best car (furthest along) - make sure we have cars first
         if (this.cars.length > 0) {
-            this.bestCar = this.cars.find(c => c.y == Math.min(...this.cars.map(c => c.y)));
+            // Find the car that's furthest ahead (lowest Y value)
+            const aliveCars = this.cars.filter(car => !car.damaged);
+            
+            if (aliveCars.length > 0) {
+                this.bestCar = aliveCars.find(c => c.y == Math.min(...aliveCars.map(c => c.y)));
+            }
             
             // Fallback if bestCar is null
             if (!this.bestCar) {
                 this.bestCar = this.cars[0];
+            }
+            
+            // Kill cars that fall too far behind the leader (but not too aggressively)
+            if (this.bestCar && aliveCars.length > 5) { // Only eliminate if we have more than 5 cars
+                const maxDistanceBehind = 500; // Increased distance - less aggressive
+                
+                for (let i = 0; i < this.cars.length; i++) {
+                    if (!this.cars[i].damaged && this.cars[i] !== this.bestCar) {
+                        const distanceBehind = this.cars[i].y - this.bestCar.y;
+                        if (distanceBehind > maxDistanceBehind) {
+                            this.cars[i].damaged = true; // Kill the car
+                            console.log(`Car eliminated: ${distanceBehind.toFixed(0)} units behind leader`);
+                        }
+                    }
+                }
             }
         }
         
@@ -84,6 +104,7 @@ class GenerationManager {
     updateStats() {
         if (!this.bestCar) return; // Safety check
         
+        // Count only truly alive cars (not damaged)
         const aliveCars = this.cars.filter(car => !car.damaged).length;
         const bestDistance = Math.abs(Math.floor(this.bestCar.y));
         
@@ -98,10 +119,12 @@ class GenerationManager {
     }
     
     draw(ctx) {
-        // Draw all cars with transparency
+        // Draw only alive cars with transparency
         ctx.globalAlpha = 0.2;
         for (let i = 0; i < this.cars.length; i++) {
-            this.cars[i].draw(ctx, "blue");
+            if (!this.cars[i].damaged) {
+                this.cars[i].draw(ctx, "blue");
+            }
         }
         
         // Draw best car prominently
